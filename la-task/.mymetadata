@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="la-task"
+  id="myeclipse.1578463512960"
+  context-root="/la-task"
+  j2ee-spec="1.7"
+  archive="la-task.war">
+  <attributes>
+    <attribute name="webrootdir" value="src/main/webapp" />
+  </attributes>
+</project-module>
+

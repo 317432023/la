@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/aop
+         http://www.springframework.org/schema/aop/spring-aop.xsd
+         http://www.springframework.org/schema/tx
+          http://www.springframework.org/schema/tx/spring-tx.xsd
+         http://www.springframework.org/schema/mvc
+         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+  	<context:property-placeholder location="classpath:redis.properties" ignore-unresolvable="true"/>
+  
+     <!-- 连接池配置 -->
+     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+	    <property name="maxTotal" value="${redis.pool.maxTotal}"/>  
+	    <property name="maxIdle" value="${redis.pool.maxIdle}" />  
+	    <property name="minIdle" value="${redis.pool.minIdle}"/>  
+	    <property name="maxWaitMillis" value="${redis.pool.maxWaitMillis}"/>  
+	    <property name="testOnBorrow" value="${redis.pool.testOnBorrow}" />  
+	    <property name="testOnReturn" value="${redis.pool.testOnReturn}" />  
+	    <property name="testWhileIdle" value="${redis.pool.testWhileIdle}" />  
+	    <property name="numTestsPerEvictionRun" value="${redis.pool.numTestsPerEvictionRun}" />  
+	    <property name="timeBetweenEvictionRunsMillis" value="${redis.pool.timeBetweenEvictionRunsMillis}" />
+	    <property name="blockWhenExhausted" value="${redis.pool.blockWhenExhausted}" />
+	    <property name="softMinEvictableIdleTimeMillis" value="${redis.pool.softMinEvictableIdleTimeMillis}" />
+	 </bean>
+  
+	 <!-- jedis客户端单机版 -->
+	 <bean id="jedisPool" class="redis.clients.jedis.JedisPool" destroy-method="close">
+	    <constructor-arg name="poolConfig" ref="jedisPoolConfig" />
+	    <constructor-arg name="host" value="${redisSingle.host}" />
+	    <constructor-arg name="port" value="${redisSingle.port}" />
+	    <constructor-arg name="timeout" value="${redis.timeout}" />
+	    <constructor-arg name="password" value="${redisSingle.password}" />
+	 </bean>
+	 <bean id="jedisClient" class="com.jeetx.common.redis.JedisClientSingle" />
+
+	  <!-- jedis集群版配置
+	  <bean id="redisClient" class="redis.clients.jedis.JedisCluster">
+	    <constructor-arg name="jedisClusterNode">
+	      <set>
+	        <bean class="redis.clients.jedis.HostAndPort">
+	          <constructor-arg name="host" value="${redisCluster.host1}"></constructor-arg>
+	          <constructor-arg name="port" value="${redisCluster.port1}"></constructor-arg>
+	        </bean>
+	        <bean class="redis.clients.jedis.HostAndPort">
+	          <constructor-arg name="host" value="${redisCluster.host2}"></constructor-arg>
+	          <constructor-arg name="port" value="${redisCluster.port2}"></constructor-arg>
+	        </bean>
+	        <bean class="redis.clients.jedis.HostAndPort">
+	          <constructor-arg name="host" value="${redisCluster.host3}"></constructor-arg>
+	          <constructor-arg name="port" value="${redisCluster.port3}"></constructor-arg>
+	        </bean>
+	        <bean class="redis.clients.jedis.HostAndPort">
+	          <constructor-arg name="host" value="${redisCluster.host4}"></constructor-arg>
+	          <constructor-arg name="port" value="${redisCluster.port4}"></constructor-arg>
+	        </bean>
+	        <bean class="redis.clients.jedis.HostAndPort">
+	          <constructor-arg name="host" value="${redisCluster.host5}"></constructor-arg>
+	          <constructor-arg name="port" value="${redisCluster.port5}"></constructor-arg>
+	        </bean>
+	        <bean class="redis.clients.jedis.HostAndPort">
+	          <constructor-arg name="host" value="${redisCluster.host6}"></constructor-arg>
+	          <constructor-arg name="port" value="${redisCluster.port6}"></constructor-arg>
+	        </bean>
+	      </set>
+	    </constructor-arg>
+	    <constructor-arg name="timeout" value="${redis.timeout}" />
+	    <constructor-arg name="maxRedirections" value="${redisCluster.maxRedirections}" />
+	    <constructor-arg name="poolConfig" ref="jedisPoolConfig" />
+	  </bean>
+	  <bean id="jedisClientCluster" class="me.jrise.feature.jedis.JedisClientCluster"></bean>
+	   -->
+</beans>
